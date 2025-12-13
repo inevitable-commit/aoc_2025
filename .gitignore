@@ -1,0 +1,4 @@
+target
+Cargo.lock
+day*/input.txt
+day*/test.txt

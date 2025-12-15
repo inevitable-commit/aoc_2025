@@ -24,10 +24,10 @@ source ../.env
 
 # Fetching the input for the challenge
 curl -s --cookie "session=$SESSION" https://adventofcode.com/2025/day/$day/input -o day$day/input.txt &
-echo "Enter test input" > day$day/test.txt
-touch day$day/test_ans.txt
 st bacon clippy day$day &
 nvim day$day/test.txt
+nvim day$day/test_ans.txt
+nvim day$day/src/lib.rs
 ```
 
 ## test (day)

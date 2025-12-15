@@ -6,26 +6,43 @@ type Output = u64;
 
 #[allow(clippy::missing_panics_doc)]
 #[must_use]
-pub fn parse(s: &'_ str) -> impl ParallelIterator<Item = (usize, Chars<'_>)> {
-    s.par_lines().map(|l| (l.len(), l.chars()))
+pub fn parse(s: &'_ str) -> impl ParallelIterator<Item = (usize, Vec<char>)> {
+    s.par_lines().map(|l| (l.len(), l.chars().collect()))
 }
 
 #[must_use]
-pub fn part1<'a>(parsed_input: impl ParallelIterator<Item = (usize, Chars<'a>)>) -> Output {
+pub fn part1<'a>(parsed_input: impl ParallelIterator<Item = (usize, Vec<char>)>) -> Output {
     parsed_input
-        .map(|(_, chars)| {
-            let mut chars = chars.rev();
-            let mut second_digit = chars.next().unwrap();
-            let mut first_digit = chars.next().unwrap();
+        .map(|(len, mut chars)| {
+            let mut i = 0;
 
-            for c in chars {
-                if c >= first_digit {
-                    if first_digit > second_digit {
-                        second_digit = first_digit;
+            let mut first_digit_idx = 0;
+            let mut first_digit = '0';
+
+            for i in 0..len - 1 {
+                let b = chars[i];
+
+                if b > first_digit {
+                    first_digit = b;
+                    first_digit_idx = i;
+                    if first_digit == '9' {
+                        break;
                     }
-                    first_digit = c;
                 }
             }
+
+            let mut second_digit = '0';
+            for i in first_digit_idx + 1..len {
+                let b = chars[i];
+
+                if b > second_digit {
+                    second_digit = b;
+                    if second_digit == '9' {
+                        break;
+                    }
+                }
+            }
+
             first_digit
                 .to_digit(10)
                 .expect("Only number character expected") as Output
@@ -38,16 +55,11 @@ pub fn part1<'a>(parsed_input: impl ParallelIterator<Item = (usize, Chars<'a>)>)
 }
 
 #[must_use]
-pub fn part2<'a>(parsed_input: impl ParallelIterator<Item = (usize, Chars<'a>)>) -> Output {
+pub fn part2<'a>(parsed_input: impl ParallelIterator<Item = (usize, Vec<char>)>) -> Output {
     parsed_input
-        .map(|(_, chars)| {
-            let mut chars = chars.rev();
-            let mut batteries= Vec::with_capacity(12);
-            for _ in 0..12 {
-                batteries.push(chars.next().unwrap());
-            }
-
-            batteries.reverse();
+        .map(|(len, mut chars)| {
+            let mut batteries = chars.split_off(len-12);
+            chars.reverse();
 
             for c in chars {
                 let mut c = c;
@@ -59,11 +71,12 @@ pub fn part2<'a>(parsed_input: impl ParallelIterator<Item = (usize, Chars<'a>)>)
                 }
             }
 
-            batteries.iter().fold(0, |joltage, digit| joltage * 10 + digit.to_digit(10).unwrap() as Output)
+            batteries.iter().fold(0, |joltage, digit| {
+                joltage * 10 + digit.to_digit(10).unwrap() as Output
+            })
         })
         .sum()
 }
-
 
 #[cfg(test)]
 mod tests {

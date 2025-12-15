@@ -25,19 +25,20 @@ source ../.env
 # Fetching the input for the challenge
 curl -s --cookie "session=$SESSION" https://adventofcode.com/2025/day/$day/input -o day$day/input.txt &
 echo "Enter test input" > day$day/test.txt
+touch day$day/test_ans.txt
 st bacon clippy day$day &
 nvim day$day/test.txt
 ```
 
 ## test (day)
->> Runs the tests for the given day.
+> Runs the tests for the given day.
 
 ```bash
 cargo t -p day$day
 ```
 
 ## run (day)
->> Runs the tests for the given day.
+> Runs the tests for the given day.
 
 **OPTIONS**
 * part
@@ -49,4 +50,11 @@ cargo t -p day$day
 
 ```bash
 cargo r -p day$day -- $part
+```
+
+## bench (day)
+> Perform benchmarking for the specified day.
+
+```bash
+cargo bench -p day$day
 ```

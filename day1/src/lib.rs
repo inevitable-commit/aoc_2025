@@ -68,15 +68,13 @@ pub fn part2(parsed_input: impl Iterator<Item = (Dir, usize)>) -> Output {
 
 #[cfg(test)]
 mod tests {
-    use crate::{parse, part1, part2};
+    use crate::{Output, parse, part1, part2};
     use common::take_input;
-
 
     #[test]
     fn parse_test() {
-        //let parsed_result = parse(TEST_STR);
-        //let valid = vec![ ];
-        //assert_eq!(parsed_result, valid);
+        let test = take_input("test.txt");
+        parse(&test).for_each(|_| {});
     }
 
     #[test]
@@ -84,9 +82,16 @@ mod tests {
         let test = take_input("test.txt");
         let parse = parse(&test);
 
-        let result = part1(parse);
+        let my_ans = part1(parse);
 
-        assert_eq!(result, 3);
+        let ans = take_input("test_ans.txt")
+            .lines()
+            .next()
+            .expect("Enter the answer for part 1 example problem")
+            .parse::<Output>()
+            .expect("Number?");
+
+        assert_eq!(my_ans, ans);
     }
 
     #[test]
@@ -94,8 +99,15 @@ mod tests {
         let test = take_input("test.txt");
         let parse = parse(&test);
 
-        let result = part2(parse);
+        let my_ans = part2(parse);
 
-        assert_eq!(result, 6);
+        let ans = take_input("test_ans.txt")
+            .lines()
+            .nth(1)
+            .expect("Enter the answer for part 2 example problem")
+            .parse::<Output>()
+            .expect("Number?");
+
+        assert_eq!(my_ans, ans);
     }
 }

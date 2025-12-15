@@ -2,3 +2,4 @@ target
 Cargo.lock
 day*/input.txt
 day*/test.txt
+day*/test_ans.txt

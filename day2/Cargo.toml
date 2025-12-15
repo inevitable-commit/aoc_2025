@@ -1,0 +1,19 @@
+[package]
+name = "day2"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+common = {path = "../common"}
+criterion = "0.8.1"
+itertools = "0.14.0"
+rayon = "1.11.0"
+
+[[bench]]
+name = "benchmark"
+harness = false
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1}
+nursery = { level = "warn", priority = -1}
+unwrap_used = "warn"
